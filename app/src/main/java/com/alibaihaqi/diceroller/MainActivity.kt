@@ -14,6 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -48,12 +52,26 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // var result with mutableState can be changed when the button click
+        var result by remember { mutableStateOf(1) }
+        // when the result value is change, will check the return the updated resource
+        val imageResource = when (result) {
+            1 -> R.drawable.dice_1
+            2 -> R.drawable.dice_2
+            3 -> R.drawable.dice_3
+            4 -> R.drawable.dice_4
+            5 -> R.drawable.dice_5
+            else -> R.drawable.dice_6
+        }
+
         Image(
-            painter = painterResource(R.drawable.dice_1),
-            contentDescription = "1"
+            // image will be shown based on dice roll
+            painter = painterResource(imageResource),
+            contentDescription = result.toString()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /*TODO*/ }) {
+        // When button is clicked, it will triggered randomised number from 1 to 6
+        Button(onClick = { result = (1..6).random() }) {
             Text(stringResource(R.string.roll))
         }
     }
